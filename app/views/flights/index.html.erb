@@ -1,0 +1,34 @@
+<h1>Flights</h1>
+
+<%= form_with url: "/flights", method: :get do |form| %>
+
+
+  <%= form.label :departure, "Departure: "  %>
+  <%= form.select :departure, @airport_options %>
+
+  <%= form.label :arrival, "Arrival: "  %>
+  <%= form.select :arrival, @airport_options %>
+
+  <%= form.label :date, "Date: "  %>
+  <%= form.date_field :date %>
+
+  <%= form.submit "Search" %>
+<% end %>
+
+<% if params[:arrival] && params[:departure] %>
+
+  <% if params[:date].present? %>
+    <% flights = Flight.where(arrival_id: params[:arrival], departure_id: params[:departure], date: params[:date].to_date.all_day)%>
+  <% else %>
+    <% flights = Flight.where(arrival_id: params[:arrival], departure_id: params[:departure])%>
+  <% end %>
+
+  <% if flights.empty? %>
+    <p>No flights for this conditions.</p>
+  <% else %>
+    <% flights.each do |flight| %>
+      <p>Departure: <%= flight.departure.code %> | Arrival: <%= flight.arrival.code %> | Datetime: <%= flight.date %></p>
+    <% end %>
+  <% end %>
+  
+<% end %>
