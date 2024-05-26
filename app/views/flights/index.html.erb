@@ -4,16 +4,20 @@
 
 
   <%= form.label :departure, "Departure: "  %>
-  <%= form.select :departure, @airport_options %>
+  <%= form.select :departure, @airport_options, :required => 'required' %>
 
   <%= form.label :arrival, "Arrival: "  %>
-  <%= form.select :arrival, @airport_options %>
+  <%= form.select :arrival, @airport_options, :required => 'required' %>
 
-  <%= form.label :date, "Date: "  %>
+  <%= form.label :passengers, "Passengers: "  %>
+  <%= form.select :passengers, [1,2,3,4], :required => 'required' %>
+
+  <%= form.label :date, "Date: (Optional)"  %>
   <%= form.date_field :date %>
 
   <%= form.submit "Search" %>
 <% end %>
+
 
 <% if params[:arrival] && params[:departure] %>
 
@@ -26,9 +30,16 @@
   <% if flights.empty? %>
     <p>No flights for this conditions.</p>
   <% else %>
-    <% flights.each do |flight| %>
-      <p>Departure: <%= flight.departure.code %> | Arrival: <%= flight.arrival.code %> | Datetime: <%= flight.date %></p>
+    <h3>Available flights</h3>
+    <%= form_with url: "/flights", method: :get do |flight_form| %>
+      <% flights.each do |flight| %>
+        <%= flight_form.radio_button :flight, "#{flight.id}", :required => 'required' %>
+        <%= flight_form.label :flight, 
+        "Departure: #{flight.departure.code} | Arrival: #{flight.arrival.code} | Datetime: #{flight.date}"%>
+      <% end %>
+      <%= flight_form.hidden_field :passengers, value: params[:passengers] %>
+      <div class="radio-button"><%= flight_form.submit "Continue" %></div>
     <% end %>
   <% end %>
-  
+    
 <% end %>
