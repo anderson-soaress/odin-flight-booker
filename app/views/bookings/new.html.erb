@@ -1,0 +1,19 @@
+<h1>Flight data</h1>
+
+<p><%="Flight ID: #{@flight.id} | Track: #{@flight.arrival.code} - #{@flight.departure.code}
+ | Departure date: #{(@flight.date).strftime("%m/%d/%Y at %I:%M %p")} 
+ | Flight duration: #{@flight.duration.strftime("%I:%M h")}" %></p>
+
+<h2>Input the passengers data</h2>
+<%= form_with model: @booking do |form| %>
+    <%= form.fields_for :passengers do |sub_form| %> 
+      <div class="passenger_input">
+        <%= sub_form.label :name %>
+        <%= sub_form.text_field :name %>
+        <%= sub_form.label :email %>
+        <%= sub_form.text_field :email %>
+      </div>
+    <% end %> 
+  <%= form.hidden_field :flight_id, value: @flight.id %>
+  <%= form.submit %>
+<%end %>
