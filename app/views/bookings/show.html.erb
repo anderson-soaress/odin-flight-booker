@@ -1,11 +1,9 @@
 <h1 class="mt-10 ml-20 font-bold text-4xl">Your booking</h1>
 
-<% flight = Flight.find(@booking.flight_id) %> 
-
 <h2 class="mt-10 ml-20 font-bold text-2xl">Flight</h2>
-<p class="mt-10 ml-20 text-xl"><%="Flight ID: #{flight.id} | Track: #{flight.arrival.code} - #{flight.departure.code}
- | Departure date: #{(flight.date).strftime("%m/%d/%Y at %I:%M %p")} 
- | Flight duration: #{flight.duration.strftime("%I:%M h")}" %></p>
+<p class="mt-10 ml-20 text-xl"><%="Flight ID: #{@flight.id} | Track: #{@flight.arrival.code} - #{@flight.departure.code}
+ | Departure date: #{(@flight.date).strftime("%m/%d/%Y at %I:%M %p")} 
+ | Flight duration: #{@flight.duration.strftime("%I:%M h")}" %></p>
 
 <h2 class="mt-10 ml-20 font-bold text-2xl">Passengers</h2>
 
