@@ -1,16 +1,16 @@
-<h1>Your booking</h1>
+<h1 class="mt-10 ml-20 font-bold text-4xl">Your booking</h1>
 
 <% flight = Flight.find(@booking.flight_id) %> 
 
-<h2>Flight</h2>
-<p><%="Flight ID: #{flight.id} | Track: #{flight.arrival.code} - #{flight.departure.code}
+<h2 class="mt-10 ml-20 font-bold text-2xl">Flight</h2>
+<p class="mt-10 ml-20 text-xl"><%="Flight ID: #{flight.id} | Track: #{flight.arrival.code} - #{flight.departure.code}
  | Departure date: #{(flight.date).strftime("%m/%d/%Y at %I:%M %p")} 
  | Flight duration: #{flight.duration.strftime("%I:%M h")}" %></p>
 
-<h2>Passengers</h2>
+<h2 class="mt-10 ml-20 font-bold text-2xl">Passengers</h2>
 
 <% @booking.passengers.each do |passenger| %>
-    <p><%= "Name: #{passenger.name} | Email: #{passenger.email}" %></p>
+    <p class="mt-10 ml-20 text-xl"><%= "Name: #{passenger.name} | Email: #{passenger.email}" %></p>
 <% end %>
 
-<%= button_to "Generate ticket" %>
+<%= button_to "Generate ticket", {}, {class: 'ml-20 mt-10 rounded bg-violet-500 text-white px-5 py-1 cursor-pointer'}%>
