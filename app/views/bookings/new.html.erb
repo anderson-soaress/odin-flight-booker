@@ -1,19 +1,23 @@
-<h1>Flight data</h1>
+<h1 class="mt-10 ml-20 font-bold text-4xl">Flight data</h1>
 
-<p><%="Flight ID: #{@flight.id} | Track: #{@flight.arrival.code} - #{@flight.departure.code}
+<p class="mt-10 ml-20 text-xl"><%="Flight ID: #{@flight.id} | Track: #{@flight.arrival.code} - #{@flight.departure.code}
  | Departure date: #{(@flight.date).strftime("%m/%d/%Y at %I:%M %p")} 
  | Flight duration: #{@flight.duration.strftime("%I:%M h")}" %></p>
 
-<h2>Input the passengers data</h2>
-<%= form_with model: @booking do |form| %>
+<h2 class="mt-10 ml-20 font-bold text-2xl">Passengers data:</h2>
+<%= form_with model: @booking, class: 'flex gap-5 flex-col ml-20 mt-10 ' do |form| %>
     <%= form.fields_for :passengers do |sub_form| %> 
-      <div class="passenger_input">
-        <%= sub_form.label :name %>
-        <%= sub_form.text_field :name %>
-        <%= sub_form.label :email %>
-        <%= sub_form.text_field :email %>
+      <div class="flex gap-5">
+        <div class="flex flex-col">
+          <%= sub_form.label :name, 'Name:' %>
+          <%= sub_form.text_field :name, class: 'bg-gray-100' %>
+        </div>
+        <div class="flex flex-col">
+          <%= sub_form.label :email, 'Email:'%>
+          <%= sub_form.text_field :email, class: 'bg-gray-100' %>
+        </div>
       </div>
     <% end %> 
   <%= form.hidden_field :flight_id, value: @flight.id %>
-  <%= form.submit %>
+  <%= form.submit "Create booking", class: 'self-start rounded bg-violet-500 text-white px-5 py-1 cursor-pointer' %>
 <%end %>
