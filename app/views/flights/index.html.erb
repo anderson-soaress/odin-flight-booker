@@ -1,23 +1,24 @@
-<h1>Flights</h1>
+<h1 class="mt-10 ml-20 font-bold text-4xl">Flights</h1>
 
-<%= form_with url: "/flights", method: :get do |form| %>
-
-
-  <%= form.label :departure, "Departure: "  %>
-  <%= form.select :departure, @airport_options, :required => 'required' %>
-
-  <%= form.label :arrival, "Arrival: "  %>
-  <%= form.select :arrival, @airport_options, :required => 'required' %>
-
-  <%= form.label :passengers, "Passengers: "  %>
-  <%= form.select :passengers, [1,2,3,4], :required => 'required' %>
-
-  <%= form.label :date, "Date: (Optional)"  %>
-  <%= form.date_field :date %>
-
-  <%= form.submit "Search" %>
+<%= form_with url: "/flights", class: ' flex gap-5 mt-10 ml-20', method: :get do |form| %>
+  <div class="input-container">
+    <%= form.label :departure, "Departure: "  %>
+    <%= form.select :departure, @airport_options, {}, { class: 'bg-gray-100', required: true } %>
+  </div>
+  <div class="input-container">
+    <%= form.label :arrival, "Arrival: "  %>
+    <%= form.select :arrival, @airport_options, {}, { class: 'bg-gray-100', required: true } %>
+  </div>
+  <div class="input-container">
+    <%= form.label :passengers, "Passengers: "  %>
+    <%= form.select :passengers, [1,2,3,4], {}, { class: 'bg-gray-100', required: true }%>
+  </div>
+  <div class="input-container">
+    <%= form.label :date, "Date: (Optional)"  %>
+    <%= form.date_field :date, class: 'bg-gray-100'%>
+  </div>
+  <%= form.submit "Search", class: 'rounded bg-violet-500 text-white px-5 py-1 cursor-pointer'%>
 <% end %>
-
 
 <% if params[:arrival] && params[:departure] %>
 
@@ -27,19 +28,22 @@
     <% flights = Flight.where(arrival_id: params[:arrival], departure_id: params[:departure])%>
   <% end %>
 
-  <% if flights.empty? %>
-    <p>No flights for this conditions.</p>
-  <% else %>
-    <h3>Available flights</h3>
-    <%= form_with url: '/bookings/new', method: :get, local: true do |flight_form| %>
-      <% flights.each do |flight| %>
-        <%= flight_form.radio_button :flight, "#{flight.id}", :required => 'required' %>
-        <%= flight_form.label :flight, 
-        "Departure: #{flight.departure.code} | Arrival: #{flight.arrival.code} | Datetime: #{flight.date}"%>
+  <div class="search-results mt-10 ml-20 ">
+    <% if flights.empty? %>
+      <p>No flights for this conditions.</p>
+    <% else %>
+      <h2 class="font-bold text-2xl mb-5">Available flights:</h3>
+      <%= form_with url: '/bookings/new', class: 'flex gap-5 flex-col', method: :get, local: true do |flight_form| %>
+        <% flights.each do |flight| %>
+          <div class="chechbox-container">
+            <%= flight_form.radio_button :flight, "#{flight.id}", {required: 'required'} %>
+            <%= flight_form.label :flight, 
+            "Departure: #{flight.departure.code} | Arrival: #{flight.arrival.code} | Datetime: #{flight.date}"%>
+          </div>
+        <% end %>
+        <%= flight_form.hidden_field :passengers, value: params[:passengers] %>
+        <div class="radio-button"><%= flight_form.submit "Continue", class: 'rounded bg-violet-500 text-white px-5 py-1 cursor-pointer'  %></div>
       <% end %>
-      <%= flight_form.hidden_field :passengers, value: params[:passengers] %>
-      <div class="radio-button"><%= flight_form.submit "Continue" %></div>
-    <% end %>
+  </div>
   <% end %>
-    
 <% end %>
