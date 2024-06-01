@@ -1,6 +1,6 @@
 <h1 class="mt-10 ml-20 font-bold text-4xl">Flights</h1>
 
-<%= form_with url: '/flights', class: 'flex gap-5 mt-10 ml-20', method: :get do |form| %>
+<%= form_with url: '/flights', class: 'flex gap-5 mt-10 ml-20', method: :get, data: {turbo_frame: 'flight_search'} do |form| %>
   <div class="input-container">
     <%= form.label :departure, "Departure: "  %>
     <%= form.select :departure, @airport_options, {}, { class: 'bg-gray-100', required: true } %>
@@ -20,21 +20,8 @@
   <%= form.submit "Search", class: 'rounded bg-violet-500 text-white px-5 py-1 cursor-pointer'%>
 <% end %>
 
-<div class="search-results mt-10 ml-20 ">
-  <% if @flights.empty? %>
-    <p>No flights for this conditions.</p>
-  <% else %>
-    <h2 class="font-bold text-2xl mb-5">Available flights:</h3>
-    <%= form_with url: '/bookings/new', class: 'flex gap-5 flex-col', method: :get, local: true do |flight_form| %>
-      <% @flights.each do |flight| %>
-        <div class="chechbox-container">
-          <%= flight_form.radio_button :flight, "#{flight.id}", {required: 'required'} %>
-          <%= flight_form.label :flight, 
-          "Departure: #{flight.departure.code} | Arrival: #{flight.arrival.code} | Datetime: #{flight.date}"%>
-        </div>
-      <% end %>
-      <%= flight_form.hidden_field :passengers, value: params[:passengers] %>
-      <div class="radio-button"><%= flight_form.submit "Continue", class: 'rounded bg-violet-500 text-white px-5 py-1 cursor-pointer'  %></div>
-    <% end %>
+<% if @flights != nil %>
+  <%= turbo_frame_tag "flight_search" do %>
+    <%= render 'flights', flights: @flights %>
   <% end %>
-</div>
+<% end %>
